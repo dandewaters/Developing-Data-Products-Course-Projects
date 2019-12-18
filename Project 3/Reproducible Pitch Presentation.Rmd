@@ -30,7 +30,7 @@ data("uspop")
 head(uspop)
 ```
 
-## Scatterplot
+## Scatterplot of Data Set
 
 ```{r makeplot, echo=FALSE}
 # Create information for us population data and linear model
@@ -52,7 +52,11 @@ abline(a=intercept, b=slope, col="black")
 
 My app fits a linear model from this dataset and predicts the US population in a year that is input by the user. It displays a scatterplot of the data set and a trendline of the predictions of the linear model fit by the data set, similar to the scatterplot shown in th eprevious slide. Once the user picks a year to predict from, the scatterplot is reconstructed to fit the input year and population prediction point and the population prediction is displayed for the user.
 
-## App UI
+## How to Use
+
+1. Enter a year between 1790 and 3000 in the numeric input box in the left side panel
+2. The predicted US population size (in millions) will be displayed in the main panel under the scatterplot. The year and population prediction point will also be added to the scatter plot in the main panel as well.
+
 ```{r appUI, echo=FALSE}
 suppressPackageStartupMessages(library(imager))
 myimg <- load.image("./AppUI.PNG")
