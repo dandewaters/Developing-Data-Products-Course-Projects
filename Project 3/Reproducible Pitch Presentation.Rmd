@@ -1,0 +1,65 @@
+---
+title: "Reproducible Pitch Presentation"
+subtitle: "Predicting US Population from 1790-1970 Census Data"
+author: "Daniel DeWaters"
+date: "12/17/2019"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Intro
+
+This presentation is the third and final project of the "Developing Data Products" course in the Data Science Specialization provided by Johns Hopkins University on Coursera.
+
+We were instructed to create a Shiny Application and publish it to a shiny server.
+
+My app is available at
+
+and the source code for the app is available at:
+
+## US Population Data Set
+ 
+I built my app from the "uspop" data set provided by the datasets package in R. It is a time series of the US population size in millions from 1790 to 1970. It was obtained from census data.
+
+```{r}
+library(datasets)
+data("uspop")
+head(uspop)
+```
+
+## Scatterplot
+
+```{r makeplot, echo=FALSE}
+# Create information for us population data and linear model
+data(uspop)
+us_pop <- data.frame(Population=as.matrix(uspop), Year=as.numeric(time(uspop)))
+fit <- lm(Population~Year, data=us_pop)
+slope <- unname(fit$coefficients["Year"])
+intercept <- unname(fit$coefficients["(Intercept)"])
+
+# Make scatterplot and line for model
+plot(Population~Year, data=us_pop, type="n",
+     main="US Population Trend", xlab = "Year",
+     ylab="US Population Size (in Millions)")
+points(Population~Year, data=us_pop, pch=19, col="blue")
+abline(a=intercept, b=slope, col="black")
+```
+
+## My App
+
+My app fits a linear model from this dataset and predicts the US population in a year that is input by the user. It displays a scatterplot of the data set and a trendline of the predictions of the linear model fit by the data set, similar to the scatterplot shown in th eprevious slide. Once the user picks a year to predict from, the scatterplot is reconstructed to fit the input year and population prediction point and the population prediction is displayed for the user.
+
+## App UI
+```{r appUI, echo=FALSE}
+suppressPackageStartupMessages(library(imager))
+myimg <- load.image("./AppUI.PNG")
+plot(myimg, axes=FALSE)
+```
+
+## Thank You
+
+Thank you for checking out my app!
+

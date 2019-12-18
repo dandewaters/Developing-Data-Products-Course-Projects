@@ -1,0 +1,121 @@
+---
+title: "Developing Data Products Course Project 2 - R Markdown and Plotly"
+author: "Daniel DeWaters"
+date: "12/12/2019"
+output:
+  ioslides_presentation: 
+    widescreen: true
+    smaller: true
+  beamer_presentation: default
+  slidy_presentation: default
+subtitle: Making a Sankey Diagram from the Titanic Data Set
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+suppressPackageStartupMessages(library(plyr))
+suppressPackageStartupMessages(library(dplyr))
+library(plotly)
+```
+
+## Overview - Sankey Diagram
+
+A Sankey diagram is a data visualization that depicts flows between groups. They consist of several nodes (typically represented by rectangles of varying width) that are linked together by lines or arrows with a width that is proportional to their flow rate.
+
+This visualization is very popular on the ["DataIsBeautiful" subreddit](https://www.reddit.com/r/dataisbeautiful/) . I chose to make this diagram for the assignment because I enjoy seeing them on r/DataIsBeautiful and the Titanic data set seemed like it was structured specifically for this type of visualization.
+
+## Overview - Titanic Data Set
+
+Information on the different groups of survivors/victims of the sinking of the Titanic in 1912.
+
+```{r loadData}
+library(datasets)
+data("Titanic")
+
+Titanic <- Titanic %>%
+  data.frame() %>%
+  mutate_at(c("Class", "Sex", "Age", "Survived"), as.character)
+
+str(Titanic)
+```
+
+## Transforming the Data
+
+In order to build this plot, we have to transform the data into a format suitable for plotly to interpret our nodes and links. We will have to convert the data into a narrow form of sorts to get all of the links between nodes and the width of each link. We can start by getting the width of each link from the class groups to sex groups, sex to age, and age to survived.
+
+
+```{r transformData1}
+# Add up totals for each node group
+level1 <- Titanic %>% 
+  group_by(Class,Sex) %>% dplyr::summarise(value=sum(Freq))
+level2 <- Titanic %>% 
+  group_by(Class,Sex,Age) %>% dplyr::summarise(value=sum(Freq))
+level3 <- Titanic %>% 
+  group_by(Class,Sex,Age, Survived) %>% dplyr::summarise(value=sum(Freq))
+```
+
+## Transforming the Data - Continued
+
+Then we have to give each link a unique number ID. Every link between each node combination - class to sex, sex to age, etc - needs to be assigned to a unique number so that plotly knows how exactly each node is connected. We have to do this in "levels" because of the way the original data set is structured, and that each node is broken up into more groups as we add variables. We then combine all the "level" groups into a single data frame. The final data frame lists out a source node ID number, the target ID that the source will be linked to, and the "value" - the width of the link.
+
+```{r transformData2}
+# Rename source/target pairs to get specific IDs
+level1 <- level1 %>%
+  ungroup() %>% data.frame %>%
+  mutate(source = rep(0:3, each=2)) %>%
+  mutate(target = 4:11) %>%
+  select(source, target, value)
+level2 <- level2 %>%
+  ungroup() %>% data.frame %>%
+  mutate(source = rep(4:11, each=2)) %>%
+  mutate(target = 12:27) %>%
+  select(source, target, value)
+level3 <- level3 %>%
+  ungroup() %>% data.frame %>%
+  mutate(source = rep(12:27, each=2)) %>%
+  mutate(target = 28:59) %>%
+  select(source, target, value)
+# Combine totals into single data frame
+narrow_Titanic <- rbind(level1, level2, level3)
+```
+
+## Labeling the Nodes
+
+After we have our link information, we have to make meaningful labels for the node ID's so we know what we're actually looking at when the diagram is made. (We're essentially re-adding the information that we just removed in the last step; I wish it didn't have to be done this way but unfortunately this is just how this plotly handles it and I couldn't find a simpler solution.)
+
+```{r transformData3}
+# Make labels for all ID numbers in order that they're created
+class_labels <- c("1st Class", "2nd Class", "3rd Class", "Crew")
+sex_labels <- rep(c("Female", "Male"), times=4)
+age_labels <- rep(c("Adult", "Child"), times=8)
+survived_labels <- rep(c("Did Not Survive", "Survived"), times=16)
+
+# Combine labels
+all_labels <- c(class_labels, sex_labels, age_labels, survived_labels)
+```
+
+## Building the Diagram
+
+Now that we have our tidy data and labels, all we have ot do is pass all the information to plotly.
+
+```{r buildPlot}
+# Make Sankey Diagram
+p <- plot_ly(type="sankey", orientation="h",
+             # Pass in label information
+             node=list(label = all_labels,
+                       pad=15,
+                       thickness=20,
+                       line=list(width=1)),
+             # Pass in source nodes, target nodes, and link values
+             link = list(source=narrow_Titanic$source,
+                         target=narrow_Titanic$target,
+                         value=narrow_Titanic$value)
+             ) %>%
+  layout(title="Sankey Diagram of Titanic Survivors", font=list(size=15))
+```
+
+## Final Diagram
+
+```{r displayPlot, echo=FALSE}
+p
+```

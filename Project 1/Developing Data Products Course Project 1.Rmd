@@ -1,0 +1,46 @@
+---
+title: "Developing Data Projects Course Project 1 - R Markdown and Leaflet"
+author: "Daniel DeWaters"
+date: "12/11/2019"
+output: html_document
+---
+# Synopsis
+
+Baltimore is enclosed in a big circle, so I thought is would be creative to make a leaflet map that took in some GPS coordinates that makes a smiley face when displayed. I got the coordinates by dropping pins in google maps around baltimore and copying/pasting the points into a data frame. I then built the leaflet map by plotting the eye points using addMarkers() and making a "smile" line across coordinate points using addPolyLines()
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+# Load libraries
+library(leaflet)
+library(sp)
+```
+
+# Code
+
+```{r points}
+# Make coordinates for eye points
+lat <- c( 39.353197,  39.360452)
+lng<-  c(-76.674711, -76.563840)
+
+eye_markers = data.frame(lat, lng)
+
+# Make coordinates for smile line
+lat <- c( 39.306558,  39.283548,  39.280657,  39.284773,  39.307927)
+lng <- c(-76.697274, -76.666095, -76.612751, -76.575872, -76.534644)
+
+smile_markers = data.frame(lat, lng)
+
+# Convert data frames into spatial points data frames
+eye_markers <- SpatialPointsDataFrame(data=eye_markers, coords=eye_markers)
+smile_markers <- SpatialPointsDataFrame(data=smile_markers, coords=smile_markers)
+
+# Build leaflet map
+map <- 
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(data=eye_markers, lng=~lng, lat=~lat) %>%
+  addPolylines(data=smile_markers, lng=~lng, lat=~lat)
+
+# Display map
+map
+```

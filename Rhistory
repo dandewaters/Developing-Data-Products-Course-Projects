@@ -1,0 +1,37 @@
+shiny::runApp()
+setwd("C:/Users/dande/Desktop/reproduciblePitch")
+list.files()
+runApp()
+knitr::opts_chunk$set(echo = FALSE)
+# Create information for us population data and linear model
+data(uspop)
+us_pop <- data.frame(Population=as.matrix(uspop), Year=as.numeric(time(uspop)))
+fit <- lm(Population~Year, data=us_pop)
+slope <- unname(fit$coefficients["Year"])
+intercept <- unname(fit$coefficients["(Intercept)"])
+# Make scatterplot and line for model
+plot(Population~Year, data=us_pop, type="n",
+main="US Population Trend", xlab = "Year",
+ylab="US Population Size (in Millions)")
+points(Population~Year, data=us_pop, pch=19, col="blue")
+abline(a=intercept, b=slope, col="black")
+# Create information for us population data and linear model
+data(uspop)
+us_pop <- data.frame(Population=as.matrix(uspop), Year=as.numeric(time(uspop)))
+fit <- lm(Population~Year, data=us_pop)
+slope <- unname(fit$coefficients["Year"])
+intercept <- unname(fit$coefficients["(Intercept)"])
+# Make scatterplot and line for model
+plot(Population~Year, data=us_pop, type="n",
+main="US Population Trend", xlab = "Year",
+ylab="US Population Size (in Millions)")
+points(Population~Year, data=us_pop, pch=19, col="blue")
+abline(a=intercept, b=slope, col="black")
+runApp()
+getwd()
+library(imager)
+install.packages("imager")
+library(imager)
+myimg <- load.image("./AppUI.PNG")
+plot(myimg)
+runApp()
