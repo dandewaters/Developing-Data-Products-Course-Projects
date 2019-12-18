@@ -1,0 +1,13 @@
+name: predictUSpop
+title: predictUSpop
+username:
+account: dandewaters
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1610245
+bundleId: 2679094
+url: https://dandewaters.shinyapps.io/predictUSpop/
+when: 1576695766.16881
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: AppUI.PNG|Reproducible Pitch Presentation.Rmd|Reproducible-Pitch-Presentation.html

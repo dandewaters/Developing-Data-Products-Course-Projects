@@ -8,7 +8,7 @@ shinyUI(fluidPage(
     sidebarLayout(
         sidebarPanel(
             numericInput("year", "What year do you want to predict the US Population for?",
-                         value=2000, min=0, max=3000, step=10),
+                         value=2000, min=1790, max=3000, step=10),
         ),
 
         # Show a plot of the generated distribution

@@ -16,9 +16,9 @@ This presentation is the third and final project of the "Developing Data Product
 
 We were instructed to create a Shiny Application and publish it to a shiny server.
 
-My app is available at
+My app is available [here.](https://dandewaters.shinyapps.io/predictUSpop/)
 
-and the source code for the app is available at:
+The source code and instructions for running the app is available [here.](https://github.com/dandewaters/Developing-Data-Products-Course-Projects)
 
 ## US Population Data Set
  
@@ -54,9 +54,9 @@ My app fits a linear model from this dataset and predicts the US population in a
 
 ## App UI
 ```{r appUI, echo=FALSE}
-suppressPackageStartupMessages(library(imager))
-myimg <- load.image("./AppUI.PNG")
-plot(myimg, axes=FALSE)
+#suppressPackageStartupMessages(library(imager))
+#myimg <- load.image("./AppUI.PNG")
+#plot(myimg, axes=FALSE)
 ```
 
 ## Thank You
