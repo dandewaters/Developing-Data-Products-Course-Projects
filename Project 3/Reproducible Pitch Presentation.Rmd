@@ -54,9 +54,9 @@ My app fits a linear model from this dataset and predicts the US population in a
 
 ## App UI
 ```{r appUI, echo=FALSE}
-#suppressPackageStartupMessages(library(imager))
-#myimg <- load.image("./AppUI.PNG")
-#plot(myimg, axes=FALSE)
+suppressPackageStartupMessages(library(imager))
+myimg <- load.image("./AppUI.PNG")
+plot(myimg, axes=FALSE)
 ```
 
 ## Thank You
